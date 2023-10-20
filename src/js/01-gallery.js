@@ -1,6 +1,8 @@
-// Add imports above this line
 import SimpleLightbox from 'simplelightbox';
+
 import 'simplelightbox/dist/simple-lightbox.min.css';
+
+// Add imports above this line
 import { galleryItems } from './gallery-items';
 // Change code below this line
 
@@ -18,17 +20,18 @@ function createMarkup(item) {
   return item
     .map(
       ({ preview, original, description }) =>
-        `<div class="gallery__item"><a class="gallery__link" href="${original}"><img
+        `<a class="gallery__item" href="${original}"><img
       class="gallery__image"
       src="${preview}"
       alt="${description}"
-      /></a></div>`
+      /></a>`
     )
     .join('');
 }
 
 //Ініціалізація бібліотеки SimpleLightbox
-new SimpleLightbox('.gallery a', {
+const lightbox = new SimpleLightbox('.gallery a', {
   captionsData: 'alt', //відображення підписів до зображень з атрибута alt
   captionDelay: 250, //підпис  з'являється через 250 мілісекунд після відкриття зображення
+  captionPosition: 'bottom',
 });
