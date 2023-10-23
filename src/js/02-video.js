@@ -2,30 +2,23 @@ import Player from '@vimeo/player';
 import throttle from 'lodash.throttle';
 
 const iframe = document.querySelector('#vimeo-player');
-const options = {
-  loop: false,
-};
-const player = new Player(iframe, options);
-console.log(player);
-
-player.on('timeupdate', () => {
-  let seconds = player.CurrentTime;
-  console.log(seconds);
+//Ініціалізуємо плеєр
+const player = new Player(iframe, {
+  loop: true,
+  quality: '1080p',
+  fullscreen: true,
 });
 
-// const player = new Player('handstick', {
-//   id: 19231868,
-//   width: 640,
-// });
+const LS_TIME_KEY = 'videoplayer-current-time';
 
-// player.on('play', function () {
-//   console.log('played the video!');
-// });
+//функція для збереження  поточного часу відтворення відео
+const getCurrentTime = function (currentTime) {
+  const seconds = currentTime.seconds;
+  localStorage.setItem(LS_TIME_KEY, JSON.stringify(seconds));
+};
 
-// player.on('play', function () {
-//   console.log('played the video!');
-// });
+// подія timeupdate - оновлення часу відтворення.
+player.on('timeupdate', throttle(getCurrentTime, 1000));
 
-// player.getVideoTitle().then(function (title) {
-//   console.log('title:', title);
-// });
+//Під час перезавантаження сторінки відновлюємо відтворення зі збереженої позиції.
+player.setCurrentTime(JSON.parse(localStorage.getItem(LS_TIME_KEY)) || 0);
